@@ -43,10 +43,40 @@
         </a>
         <p><small>Installation takes just 1 minute!</small></p>
         <p><small><b>Help:</b> From within slack, you can just type <code class="quoted red">/chuck help</code> for some extra information on how to use the app.</small></p>
+    </section>
+    <section id="facebook_messenger">
+        <h3><img alt="Facebook Messenger" src="" /></h3>
+        <p>The Chuck Norris app is also on Facebook Messenger. Click the Message Us button below to start a conversation.</p>
+        <p>You can simply ask a random joke by typing <code class="quoted red">hi, tell me a joke</code>. To get help to get started type <code class="quoted red">help</code>.</p>
+        <div class="fb-messengermessageus"
+          messenger_app_id="{{ facebook_messenger_app_id }}"
+          page_id="{{ facebook_messenger_page_id }}"
+          color="white"
+          size="standard" >
+        </div>
+    </section>
+    <section>
         <p><small><b>Contact:</b> Feel free to tweet ideas, suggestions, help requests and similar to <a href="https://twitter.com/MatChilling" target="_blank">@matchilling</a> or drop me a line at m@matchilling.com</small></p>
         <p><small><b>Privacy:</b> The app was a weekend project and is just fun. All we're storing are team and user ids and the appropriate OAuth tokens. This allows you to post these awesome Chuck Norris facts on slack on the appropriate channel. Our applications is hosted on https://aws.amazon.com/privacy. We use a secure connection between slack servers and aws. We anonymously keep track of two data points; the total number of teams and unique users. None of the data will ever be shared, except for maybe some anonymous statistics in the future.</small></p>
-
     </section>
+
+    <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId: "{{ facebook_messenger_app_id }}",
+        xfbml: true,
+        version: "{{ facebook_messenger_version }}"
+      });
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) { return; }
+       js = d.createElement(s); js.id = id;
+       js.src = "//connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
 
     <script>
     function toggleMe(target){
