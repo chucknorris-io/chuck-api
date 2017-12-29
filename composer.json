@@ -6,10 +6,11 @@
     "license": "GPL-3.0+",
     "require": {
         "php": "~7.0",
+        "aws/aws-sdk-php": "^3.48",
         "bramdevries/oauth2-slack": "~0.1",
         "bramus/monolog-colored-line-formatter": "^2.0",
-        "chucknorris/lib": "~0.5",
-        "facebook/graph-sdk": "^5.3",
+        "doctrine/dbal": "~2.5",
+        "jms/serializer": "~1.2",
         "monolog/monolog": "~1",
         "nochso/html-compress-twig": "~1",
         "silex/silex": "~1.1",
@@ -19,12 +20,9 @@
         "vlucas/phpdotenv": "^2.3",
         "predis/predis": "^1.1"
     },
-    "repositories": [{
-        "type": "vcs",
-        "url": "https://github.com/chucknorris-io/chuck-lib.git"
-    }],
     "autoload": {
         "psr-4": {
+            "Chuck\\": "src/Lib",
             "Chuck\\App\\": "src"
         }
     },

@@ -11,6 +11,8 @@
  */
 namespace Chuck\App\Api;
 
+use \Aws\S3\S3Client;
+
 /**
  *
  * ServicesLoader
@@ -66,6 +68,7 @@ class ServicesLoader implements \Silex\ServiceProviderInterface
         $this->app['config'] = $this->app->share(
             function () {
                 return [
+                    'aws_region'                  => getenv('AWS_DEFAULT_REGION')          ? : null, 
                     'alexa_skill_id'              => getenv('ALEXA_SKILL_ID')              ? : null,
                     'application_env'             => getenv('APPLICATION_ENV')             ? : null,
                     'blackfire_server_id'         => getenv('BLACKFIRE_SERVER_ID')         ? : null,
@@ -116,14 +119,28 @@ class ServicesLoader implements \Silex\ServiceProviderInterface
             }
         );
 
-        $this->app['facebook.graph-sdk'] = $this->app->share(
+        $this->app['aws.s3'] = $this->app->share(
             function () {
-                return new \Facebook\Facebook([
-                    'app_id'                => $this->app['config']['facebook_app_id'],
-                    'app_secret'            => $this->app['config']['facebook_app_secret'],
-                    'default_graph_version' => 'v2.7',
-                    'default_access_token'  => $this->app['config']['facebook_page_access_token']
+                return S3Client::factory([
+                    'region'  => $this->app['config']['aws_region'],
+                    'version' => '2006-03-01'
                 ]);
+            }
+        );
+        
+        $this->app['service.the_daily_chuck'] = $this->app->share(
+            function () {
+                return new \Chuck\RSS\TheDailyChuck(
+                    [
+                        'bucket' => 'io.chucknorris.api',
+                        'key'    => sprintf(
+                            'newsletter/%s/dailychuck/issues.json',
+                            $this->app['application_env']
+                         )
+                    ],
+                    $this->app['aws.s3'],
+                    $this->app['chuck.joke']
+                );
             }
         );
     }

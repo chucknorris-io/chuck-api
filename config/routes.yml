@@ -34,12 +34,6 @@ api.intg_alexa :
     options  :
         _before_middlewares : [ \Chuck\App\Api\Middleware\RequestBodyParser::parse, \Chuck\App\Api\Middleware\Verification::alexaOrigin ]
 
-api.intg_facebook_verify :
-    path     : /integration/facebook
-    methods  : GET
-    defaults :
-        _controller : \Chuck\App\Api\Controller\Integration\FacebookController::subscribeAction
-
 api.intg_facebook :
     path     : /integration/facebook
     methods  : POST
@@ -59,3 +53,11 @@ sitemap.jokes :
     methods   : GET
     defaults  :
         _controller : \Chuck\App\Api\Controller\SitemapController::jokesAction
+
+feed.daily_chuck :
+    path      : /feed/daily-chuck.{extension}
+    methods   : GET
+    defaults  :
+        _controller : \Chuck\App\Api\Controller\Feed\TheDailyChuckController::indexAction
+    requirements:
+        extension: '(xml|json)'
