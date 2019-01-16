@@ -1,55 +1,16 @@
-version: '2.1'
+version: '3.3'
 
 services:
-  web:
-    build:
-      context: .
-      dockerfile: ./docker/nginx/Dockerfile
-    container_name: chucknorris-web
-    depends_on:
-      php:
-        condition: service_started
-    networks:
-      - chucknorris-network
-    ports:
-      - "8080:80"
-      - "80:80"
-      - "443:443"
-    volumes:
-      - .:/var/www/html
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-
-  php:
-    build:
-      context: .
-      dockerfile: ./docker/fpm/Dockerfile
-    container_name: chucknorris-api
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/chuck
-      REDIS_URL: redis://redis:6379
-    volumes:
-      - .:/var/www/html
-      - /var/www/html/vendor/
-    depends_on:
-      redis:
-        condition: service_started
-      postgres:
-        condition: service_started
-    networks:
-      - chucknorris-network
-
-  redis:
-    image: redis
-    container_name: chucknorris-redis
-    networks:
-      - chucknorris-network
-
   postgres:
     image: chucknorrisio/postgres
     container_name: chucknorris-postgres
-    networks:
-      - chucknorris-network
+    ports:
+      - "5432:5432"
 
-networks:
-  chucknorris-network:
-    driver: bridge
+  swagger:
+    image: swaggerapi/swagger-ui
+    container_name: chucknorris-swagger
+    ports:
+      - "4567:8080"
+    environment:
+      API_URL: "http://localhost:8080/documentation"
