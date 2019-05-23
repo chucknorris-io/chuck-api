@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/chucknorris-io/chuck-api.svg?branch=feature%2Fspring-migration)](https://travis-ci.org/chucknorris-io/chuck-api)
+
 # io.chucknorris.app
 
 **Urls:**
