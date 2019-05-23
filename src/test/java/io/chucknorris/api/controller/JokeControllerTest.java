@@ -21,6 +21,7 @@ public class JokeControllerTest {
   private static String jokeId = "ys--0t_-rrifz5jtcparbg";
   private static String jokeValue = "Some people ask for a Kleenex when they sneeze, Chuck Norris asks for a body bag.";
   private static Joke joke = new Joke()
+          .setCategories(new String[]{"dev"})
       .setId(jokeId)
       .setValue(jokeValue);
 
@@ -92,6 +93,76 @@ public class JokeControllerTest {
     assertEquals("", jokeValue);
 
     verify(jokeRepository, times(1)).findById("does-not-exist");
+    verify(this.httpServletResponse).setStatus(404);
+    verifyNoMoreInteractions(jokeRepository);
+  }
+
+  @Test
+  public void testGetRandomJokeReturnsJoke() {
+    when(jokeRepository.getRandomJoke()).thenReturn(joke);
+
+    Joke joke = jokeController.getRandomJoke(null);
+    assertEquals(JokeControllerTest.joke, joke);
+
+    verify(jokeRepository, times(1)).getRandomJoke();
+    verifyNoMoreInteractions(jokeRepository);
+  }
+
+  @Test
+  public void testGetRandomJokeReturnsJokeByCategory() {
+    when(jokeRepository.getRandomJokeByCategory("dev")).thenReturn(joke);
+    when(jokeRepository.findAllCategories()).thenReturn(new String[]{"dev"});
+
+    Joke joke = jokeController.getRandomJoke("dev");
+    assertEquals(JokeControllerTest.joke, joke);
+
+    verify(jokeRepository, times(1)).findAllCategories();
+    verify(jokeRepository, times(1)).getRandomJokeByCategory("dev");
+    verifyNoMoreInteractions(jokeRepository);
+  }
+
+  @Test(expected = EntityNotFoundException.class)
+  public void testGetRandomJokeReturnsJokeByCategoryThrowsException() {
+    when(jokeRepository.findAllCategories()).thenReturn(new String[]{});
+
+    jokeController.getRandomJoke("dev");
+
+    verify(jokeRepository, times(1)).findAllCategories();
+    verifyNoMoreInteractions(jokeRepository);
+  }
+
+  @Test
+  public void testGetRandomJokeReturnsJokeValue() {
+    when(jokeRepository.getRandomJoke()).thenReturn(joke);
+
+    String jokeValue = jokeController.getRandomJokeValue(null, this.httpServletResponse);
+    assertEquals(joke.getValue(), jokeValue);
+
+    verify(jokeRepository, times(1)).getRandomJoke();
+    verifyNoMoreInteractions(jokeRepository);
+  }
+
+  @Test
+  public void testGetRandomJokeReturnsJokeValueByCategory() {
+    when(jokeRepository.getRandomJokeByCategory("dev")).thenReturn(joke);
+    when(jokeRepository.findAllCategories()).thenReturn(new String[]{"dev"});
+
+    String jokeValue = jokeController.getRandomJokeValue("dev", this.httpServletResponse);
+    assertEquals(joke.getValue(), jokeValue);
+
+    verify(jokeRepository, times(1)).findAllCategories();
+    verify(jokeRepository, times(1)).getRandomJokeByCategory("dev");
+    verifyNoMoreInteractions(jokeRepository);
+  }
+
+  @Test
+  public void testGetRandomJokeValueReturnsEmptyStringIfCategoryDoesNotExist() {
+    when(jokeRepository.findAllCategories()).thenReturn(new String[]{});
+
+    String jokeValue = jokeController.getRandomJokeValue("does-not-exist", this.httpServletResponse);
+    assertEquals("", jokeValue);
+
+    verify(jokeRepository, times(1)).findAllCategories();
     verify(this.httpServletResponse).setStatus(404);
     verifyNoMoreInteractions(jokeRepository);
   }

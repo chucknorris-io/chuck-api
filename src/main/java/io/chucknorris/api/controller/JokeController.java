@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 
 @RestController
 @RequestMapping(value = "/jokes")
@@ -59,6 +60,47 @@ public class JokeController {
     } catch(EntityNotFoundException e) {
       response.setStatus(HttpStatus.NOT_FOUND.value());
       return "";
+    }
+  }
+
+  @RequestMapping(
+          value = "/random",
+          method = RequestMethod.GET,
+          headers = HttpHeaders.ACCEPT + "=" + MediaType.APPLICATION_JSON_VALUE,
+          produces = MediaType.APPLICATION_JSON_VALUE
+  )
+  public @ResponseBody
+  Joke getRandomJoke(@RequestParam(value = "category", required = false) final String category) {
+    if (category == null) {
+      return jokeRepository.getRandomJoke();
+    }
+
+    String[] categories = jokeRepository.findAllCategories();
+    if(!Arrays.asList(categories).contains(category)) {
+      throw new EntityNotFoundException("No jokes for category \"" + category + "\" found.");
+    } else {
+      return jokeRepository.getRandomJokeByCategory(category);
+    }
+  }
+
+  @RequestMapping(
+          value = "/random",
+          method = RequestMethod.GET,
+          headers = HttpHeaders.ACCEPT + "=" + MediaType.TEXT_PLAIN_VALUE,
+          produces = MediaType.TEXT_PLAIN_VALUE
+  )
+  public @ResponseBody
+  String getRandomJokeValue(@RequestParam(value = "category", required = false) final String category, HttpServletResponse response) {
+    if (category == null) {
+      return jokeRepository.getRandomJoke().getValue();
+    }
+
+    String[] categories = jokeRepository.findAllCategories();
+    if(!Arrays.asList(categories).contains(category)) {
+      response.setStatus(HttpStatus.NOT_FOUND.value());
+      return "";
+    } else {
+      return jokeRepository.getRandomJokeByCategory(category).getValue();
     }
   }
 }
