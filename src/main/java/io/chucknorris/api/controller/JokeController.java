@@ -8,13 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Size;
 import java.util.Arrays;
 
 @RestController
 @RequestMapping(value = "/jokes")
+@Validated
 public class JokeController {
 
   @Autowired
@@ -129,7 +132,10 @@ public class JokeController {
           produces = MediaType.APPLICATION_JSON_VALUE
   )
   public @ResponseBody
-  JokeSearchResult search(@RequestParam(value = "query", required = false) final String query) {
+  JokeSearchResult search(
+          @RequestParam(value = "query")
+          @Size(min = 3, max = 120) final String query
+  ) {
     Joke[] jokes = jokeRepository.searchByQuery(query);
     return new JokeSearchResult(jokes);
   }
@@ -141,7 +147,10 @@ public class JokeController {
           produces = MediaType.TEXT_PLAIN_VALUE
   )
   public @ResponseBody
-  String searchValues(@RequestParam(value = "query", required = false) final String query) {
+  String searchValues(
+          @RequestParam(value = "query")
+          @Size(min = 3, max = 120) final String query
+  ) {
     Joke[] jokes = jokeRepository.searchByQuery(query);
     StringBuilder stringBuilder = new StringBuilder();
 
