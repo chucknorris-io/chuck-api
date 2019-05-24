@@ -15,6 +15,12 @@ import org.springframework.stereotype.Repository;
 })
 public interface JokeRepository extends JpaRepository<Joke, String> {
   @Query(
+          value = "SELECT j.categories->>0 FROM joke j WHERE j.categories IS NOT NULL GROUP BY j.categories->>0 ORDER BY j.categories->>0 ASC",
+          nativeQuery = true
+  )
+  String[] findAllCategories();
+
+  @Query(
           value = "SELECT j.categories, j.created_at, j.joke_id, j.updated_at, j.value FROM joke AS j ORDER BY RANDOM() LIMIT 1;",
           nativeQuery = true
   )
@@ -27,11 +33,13 @@ public interface JokeRepository extends JpaRepository<Joke, String> {
                   "ORDER BY RANDOM() LIMIT 1;",
           nativeQuery = true
   )
-  Joke getRandomJokeByCategory(@Param("category") String category);
+  Joke getRandomJokeByCategory(@Param("category") final String category);
 
   @Query(
-      value = "SELECT j.categories->>0 FROM joke j WHERE j.categories IS NOT NULL GROUP BY j.categories->>0 ORDER BY j.categories->>0 ASC",
-      nativeQuery = true
+          value = "SELECT j.categories, j.created_at, j.joke_id, j.updated_at, j.value " +
+                  "FROM joke AS j " +
+                  "WHERE lower(j.value) LIKE CONCAT('%', lower(:query), '%');",
+          nativeQuery = true
   )
-  String[] findAllCategories();
+  Joke[] searchByQuery(@Param("query") final String query);
 }

@@ -2,15 +2,12 @@ package io.chucknorris.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @TypeDefs({
     @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)

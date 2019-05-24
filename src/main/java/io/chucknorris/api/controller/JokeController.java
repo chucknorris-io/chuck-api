@@ -2,6 +2,7 @@ package io.chucknorris.api.controller;
 
 import io.chucknorris.api.exception.EntityNotFoundException;
 import io.chucknorris.api.model.Joke;
+import io.chucknorris.api.model.JokeSearchResult;
 import io.chucknorris.api.repository.JokeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +33,23 @@ public class JokeController {
   )
   public @ResponseBody String[] getCategories() {
     return jokeRepository.findAllCategories();
+  }
+
+  @RequestMapping(
+          value = "/categories",
+          method = RequestMethod.GET,
+          headers = HttpHeaders.ACCEPT + "=" + MediaType.TEXT_PLAIN_VALUE,
+          produces = MediaType.TEXT_PLAIN_VALUE
+  )
+  public @ResponseBody
+  String getCategoryValues() {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    for (String category : jokeRepository.findAllCategories()) {
+      stringBuilder.append(category + '\n');
+    }
+
+    return stringBuilder.toString();
   }
 
   @RequestMapping(
@@ -102,5 +120,35 @@ public class JokeController {
     } else {
       return jokeRepository.getRandomJokeByCategory(category).getValue();
     }
+  }
+
+  @RequestMapping(
+          value = "/search",
+          method = RequestMethod.GET,
+          headers = HttpHeaders.ACCEPT + "=" + MediaType.APPLICATION_JSON_VALUE,
+          produces = MediaType.APPLICATION_JSON_VALUE
+  )
+  public @ResponseBody
+  JokeSearchResult search(@RequestParam(value = "query", required = false) final String query) {
+    Joke[] jokes = jokeRepository.searchByQuery(query);
+    return new JokeSearchResult(jokes);
+  }
+
+  @RequestMapping(
+          value = "/search",
+          method = RequestMethod.GET,
+          headers = HttpHeaders.ACCEPT + "=" + MediaType.TEXT_PLAIN_VALUE,
+          produces = MediaType.TEXT_PLAIN_VALUE
+  )
+  public @ResponseBody
+  String searchValues(@RequestParam(value = "query", required = false) final String query) {
+    Joke[] jokes = jokeRepository.searchByQuery(query);
+    StringBuilder stringBuilder = new StringBuilder();
+
+    for (Joke joke : jokes) {
+      stringBuilder.append(joke.getValue() + '\n');
+    }
+
+    return stringBuilder.toString();
   }
 }

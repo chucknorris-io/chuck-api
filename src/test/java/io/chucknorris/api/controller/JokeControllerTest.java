@@ -2,6 +2,7 @@ package io.chucknorris.api.controller;
 
 import io.chucknorris.api.exception.EntityNotFoundException;
 import io.chucknorris.api.model.Joke;
+import io.chucknorris.api.model.JokeSearchResult;
 import io.chucknorris.api.repository.JokeRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -44,6 +46,19 @@ public class JokeControllerTest {
     assertEquals("dev", categories[0]);
     assertEquals("animal", categories[1]);
     assertEquals(2, categories.length);
+
+    verify(jokeRepository, times(1)).findAllCategories();
+    verifyNoMoreInteractions(jokeRepository);
+  }
+
+  @Test
+  public void testGetCategoryValues() {
+    when(jokeRepository.findAllCategories()).thenReturn(
+            new String[]{"dev", "animal"}
+    );
+
+    String categoryValues = jokeController.getCategoryValues();
+    assertEquals("dev\nanimal\n", categoryValues);
 
     verify(jokeRepository, times(1)).findAllCategories();
     verifyNoMoreInteractions(jokeRepository);
@@ -164,6 +179,29 @@ public class JokeControllerTest {
 
     verify(jokeRepository, times(1)).findAllCategories();
     verify(this.httpServletResponse).setStatus(404);
+    verifyNoMoreInteractions(jokeRepository);
+  }
+
+  @Test
+  public void testSearch() {
+    when(jokeRepository.searchByQuery("Kleenex")).thenReturn(new Joke[]{joke});
+
+    JokeSearchResult jokeSearchResult = jokeController.search("Kleenex");
+    assertEquals(jokeSearchResult.getTotal(), 1);
+    assertSame(jokeSearchResult.getResult()[0], joke);
+
+    verify(jokeRepository, times(1)).searchByQuery("Kleenex");
+    verifyNoMoreInteractions(jokeRepository);
+  }
+
+  @Test
+  public void testSearchValues() {
+    when(jokeRepository.searchByQuery("Kleenex")).thenReturn(new Joke[]{joke});
+
+    String searchValues = jokeController.searchValues("Kleenex");
+    assertEquals("Some people ask for a Kleenex when they sneeze, Chuck Norris asks for a body bag.\n", searchValues);
+
+    verify(jokeRepository, times(1)).searchByQuery("Kleenex");
     verifyNoMoreInteractions(jokeRepository);
   }
 }
