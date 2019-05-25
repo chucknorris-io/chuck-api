@@ -37,6 +37,10 @@ public class Joke implements Serializable {
   @JsonProperty("updated_at")
   private String updatedAt;
 
+  @Transient
+  @JsonProperty("url")
+  private String url;
+
   @Column(name = "value")
   @JsonProperty("value")
   private String value;
@@ -89,6 +93,10 @@ public class Joke implements Serializable {
     this.updatedAt = updatedAt;
 
     return this;
+  }
+
+  public String getUrl() {
+    return "https://api.chucknorris.io/jokes/" + id;
   }
 
   public String getValue() {

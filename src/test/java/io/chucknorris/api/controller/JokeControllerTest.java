@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
@@ -109,6 +110,24 @@ public class JokeControllerTest {
 
     verify(jokeRepository, times(1)).findById("does-not-exist");
     verify(this.httpServletResponse).setStatus(404);
+    verifyNoMoreInteractions(jokeRepository);
+  }
+
+  @Test
+  public void getJokeViewReturnsModelAndView() {
+    when(jokeRepository.findById(jokeId)).thenReturn(Optional.of(joke));
+    when(jokeRepository.getJokeWindow(jokeId)).thenReturn(
+            jokeId + ',' + "yvrhbpauspegla4pf7dxna" + ',' + "id4dTcDiRneK4btgOGpNNw"
+    );
+
+    ModelAndView view = jokeController.getJokeView(jokeId);
+    assertEquals(joke, view.getModel().get("joke"));
+    assertEquals("/jokes/yvrhbpauspegla4pf7dxna", view.getModel().get("next_joke_url"));
+    assertEquals("/jokes/ys--0t_-rrifz5jtcparbg", view.getModel().get("current_joke_url"));
+    assertEquals("/jokes/id4dTcDiRneK4btgOGpNNw", view.getModel().get("prev_joke_url"));
+
+    verify(jokeRepository, times(1)).findById(jokeId);
+    verify(jokeRepository, times(1)).getJokeWindow(jokeId);
     verifyNoMoreInteractions(jokeRepository);
   }
 

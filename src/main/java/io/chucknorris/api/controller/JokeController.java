@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.Size;
@@ -82,6 +83,28 @@ public class JokeController {
       response.setStatus(HttpStatus.NOT_FOUND.value());
       return "";
     }
+  }
+
+  @RequestMapping(
+          value = "/{id}",
+          method = RequestMethod.GET,
+          headers = HttpHeaders.ACCEPT + "=" + MediaType.TEXT_HTML_VALUE,
+          produces = MediaType.TEXT_HTML_VALUE
+  )
+  public ModelAndView getJokeView(@PathVariable String id) {
+    Joke joke = jokeRepository.findById(id).orElseThrow(
+            () -> new EntityNotFoundException("Joke with id \"" + id + "\" not found.")
+    );
+
+    String[] ids = jokeRepository.getJokeWindow(id).split(",");
+
+    ModelAndView model = new ModelAndView("joke");
+    model.addObject("joke", joke);
+    model.addObject("next_joke_url", "/jokes/" + ids[1]);
+    model.addObject("current_joke_url", "/jokes/" + id);
+    model.addObject("prev_joke_url", "/jokes/" + ids[2]);
+
+    return model;
   }
 
   @RequestMapping(

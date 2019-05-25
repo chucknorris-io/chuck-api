@@ -21,6 +21,12 @@ public interface JokeRepository extends JpaRepository<Joke, String> {
   String[] findAllCategories();
 
   @Query(
+          value = "WITH joke AS( SELECT joke_id, ROW_NUMBER() OVER (ORDER BY joke.created_at ASC, joke.joke_id ASC) AS row_number FROM joke), current AS ( SELECT * FROM joke WHERE joke_id = :id LIMIT 1 ), prev AS ( SELECT (CASE WHEN (SELECT min(row_number) FROM joke) >= current.row_number - 1 THEN (SELECT joke_id FROM joke WHERE row_number = (SELECT max(row_number) FROM joke)) ELSE (SELECT joke_id FROM joke WHERE row_number = current.row_number - 1) END) AS joke_id FROM joke, current LIMIT 1 ), next AS ( SELECT (CASE WHEN (SELECT max(row_number) FROM joke) <= current.row_number + 1 THEN (SELECT joke_id FROM joke WHERE row_number = (SELECT min(row_number) FROM joke)) ELSE (SELECT joke_id FROM joke WHERE row_number = current.row_number + 1) END) AS joke_id FROM joke, current LIMIT 1 ) SELECT current.joke_id AS current_joke_id, next.joke_id AS next_joke_id, prev.joke_id AS prev_joke_id FROM current, prev, next;",
+          nativeQuery = true
+  )
+  String getJokeWindow(@Param("id") final String id);
+
+  @Query(
           value = "SELECT j.categories, j.created_at, j.joke_id, j.updated_at, j.value FROM joke AS j ORDER BY RANDOM() LIMIT 1;",
           nativeQuery = true
   )
