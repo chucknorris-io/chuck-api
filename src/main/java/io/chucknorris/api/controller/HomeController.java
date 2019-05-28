@@ -1,7 +1,6 @@
 package io.chucknorris.api.controller;
 
 import io.chucknorris.api.repository.JokeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -11,10 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class HomeController {
-    @Autowired
     private JokeRepository jokeRepository;
 
-    @Autowired
     public HomeController(JokeRepository jokeRepository) {
         this.jokeRepository = jokeRepository;
     }

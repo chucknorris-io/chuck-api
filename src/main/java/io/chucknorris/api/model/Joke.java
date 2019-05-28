@@ -96,7 +96,7 @@ public class Joke implements Serializable {
   }
 
   public String getUrl() {
-    return "https://api.chucknorris.io/jokes/" + id;
+      return "/jokes/" + id;
   }
 
   public String getValue() {

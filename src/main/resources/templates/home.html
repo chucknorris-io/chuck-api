@@ -45,7 +45,7 @@
             {<br>
                 "icon_url" : "<span id="response_icon_url" th:text="${joke.getIconUrl()}"/>",<br>
                 "id" : "<span id="response_id" th:text="${joke.getId()}"/>",<br>
-                "url" : "<a href="{{ example_response_url }}" id="response_url" th:text="${joke.getUrl()}"/></a>"<br>
+                "url" : "<a th:attr="href=${joke.getUrl()}" id="response_url" th:text="${joke.getUrl()}"/></a>"<br>
                 "value" : "<span id="response_text" th:text="${joke.getValue()}"/>"<br>
             }
         </code>

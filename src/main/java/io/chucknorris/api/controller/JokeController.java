@@ -4,7 +4,6 @@ import io.chucknorris.api.exception.EntityNotFoundException;
 import io.chucknorris.api.model.Joke;
 import io.chucknorris.api.model.JokeSearchResult;
 import io.chucknorris.api.repository.JokeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,11 +19,8 @@ import java.util.Arrays;
 @RequestMapping(value = "/jokes")
 @Validated
 public class JokeController {
-
-  @Autowired
   private JokeRepository jokeRepository;
 
-  @Autowired
   public JokeController(JokeRepository jokeRepository) {
     this.jokeRepository = jokeRepository;
   }
