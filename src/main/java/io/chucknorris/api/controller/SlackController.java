@@ -6,19 +6,17 @@ import io.chucknorris.api.model.Joke;
 import io.chucknorris.api.repository.JokeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -31,10 +29,42 @@ import java.util.regex.Pattern;
 public class SlackController {
 
     private static final Logger logger = LoggerFactory.getLogger(SlackController.class);
+
     @Value("${application.base_url}")
     private String baseUrl;
-    @Autowired
+
     private JokeRepository jokeRepository;
+    private SlackService slackService;
+
+    public SlackController(JokeRepository jokeRepository, SlackService slackService) {
+        this.jokeRepository = jokeRepository;
+        this.slackService = slackService;
+    }
+
+    @RequestMapping(
+            value = "/connect/slack",
+            method = RequestMethod.GET,
+            headers = HttpHeaders.ACCEPT + "=" + MediaType.TEXT_HTML_VALUE,
+            produces = MediaType.TEXT_HTML_VALUE
+    )
+    public ModelAndView connect(@RequestParam(value = "code") final String code) {
+        AccessToken accessToken = slackService.requestAccessToken(code);
+
+        ModelAndView model = new ModelAndView("connect/slack");
+        if (accessToken.getAccessToken() != null) {
+            model.setStatus(HttpStatus.OK);
+            model.addObject("page_title", "Congrats, the app was successfully installed for your Slack team!");
+            model.addObject("error", false);
+            model.addObject("message", null);
+        } else {
+            model.setStatus(HttpStatus.UNAUTHORIZED);
+            model.addObject("page_title", "Oops, an error has occurred.");
+            model.addObject("error", true);
+            model.addObject("message", "Oops, an error has occurred. Please try again later!");
+        }
+
+        return model;
+    }
 
     @RequestMapping(
             value = "/integration/slack",

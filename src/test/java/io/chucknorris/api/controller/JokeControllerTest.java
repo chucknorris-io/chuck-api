@@ -24,7 +24,7 @@ public class JokeControllerTest {
   private static String jokeId = "ys--0t_-rrifz5jtcparbg";
   private static String jokeValue = "Some people ask for a Kleenex when they sneeze, Chuck Norris asks for a body bag.";
   private static Joke joke = new Joke()
-          .setCategories(new String[]{"dev"})
+      .setCategories(new String[]{"dev"})
       .setId(jokeId)
       .setValue(jokeValue);
 
@@ -54,9 +54,7 @@ public class JokeControllerTest {
 
   @Test
   public void testGetCategoryValues() {
-    when(jokeRepository.findAllCategories()).thenReturn(
-            new String[]{"dev", "animal"}
-    );
+    when(jokeRepository.findAllCategories()).thenReturn(new String[]{"dev", "animal"});
 
     String categoryValues = jokeController.getCategoryValues();
     assertEquals("dev\nanimal\n", categoryValues);
@@ -78,9 +76,7 @@ public class JokeControllerTest {
 
   @Test(expected = EntityNotFoundException.class)
   public void testGetJokeThrowsException() {
-    when(jokeRepository.findById("does-not-exist")).thenThrow(
-            new EntityNotFoundException("")
-    );
+    when(jokeRepository.findById("does-not-exist")).thenThrow(new EntityNotFoundException(""));
 
     jokeController.getJoke("does-not-exist");
 
@@ -100,10 +96,8 @@ public class JokeControllerTest {
   }
 
   @Test
-  public void testGetJokeValueReturnsEmptyStringIfEnityNotFound() {
-    when(jokeRepository.findById("does-not-exist")).thenThrow(
-            new EntityNotFoundException("")
-    );
+  public void testGetJokeValueReturnsEmptyStringIfEntityNotFound() {
+    when(jokeRepository.findById("does-not-exist")).thenThrow(new EntityNotFoundException(""));
 
     String jokeValue = jokeController.getJokeValue("does-not-exist", this.httpServletResponse);
     assertEquals("", jokeValue);
@@ -117,7 +111,7 @@ public class JokeControllerTest {
   public void getJokeViewReturnsModelAndView() {
     when(jokeRepository.findById(jokeId)).thenReturn(Optional.of(joke));
     when(jokeRepository.getJokeWindow(jokeId)).thenReturn(
-            jokeId + ',' + "yvrhbpauspegla4pf7dxna" + ',' + "id4dTcDiRneK4btgOGpNNw"
+        jokeId + ',' + "yvrhbpauspegla4pf7dxna" + ',' + "id4dTcDiRneK4btgOGpNNw"
     );
 
     ModelAndView view = jokeController.getJokeView(jokeId);

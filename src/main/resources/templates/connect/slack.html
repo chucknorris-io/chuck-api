@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="~{layouts/default}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${page_title}">${page_title}</title>
+
+    <meta name="robots" content="noindex, follow" />
+</head>
+<body>
+<div layout:fragment="content">
+    <section>
+        <div th:if="${error}" class="alert alert-error" role="alert">
+            <p id="message" th:text="${message != null} ? ${message} : 'An error has occurred.'"/>
+        </div>
+        <div th:unless="${error}" class="alert alert-success" role="alert">
+            <p id="message">
+                <b>Congrats!</b> The app was successfully installed for your Slack team.<br><br>
+                Start retrieving random Chuck Norris facts by just typing <code>/chuck</code> into your slack console.<br><br>
+                Additionally you can type <code>/chuck {category_name}</code> to get a random joke from a given category. Type <code>/chuck -cat</code> to show a list of all available categories.<br><br>
+                You can also try the free text search by sending <code>/chuck ? {search_term}</code>.
+            </p>
+        </div>
+    </section>
+</div>
+</body>
+</html>

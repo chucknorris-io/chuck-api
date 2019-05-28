@@ -1,8 +1,6 @@
 package io.chucknorris.api.controller;
 
-import io.chucknorris.api.lib.slack.Impl.Request;
-import io.chucknorris.api.lib.slack.Impl.ResponseAttachment;
-import io.chucknorris.api.lib.slack.Impl.ResponseType;
+import io.chucknorris.api.lib.slack.Impl.*;
 import io.chucknorris.api.lib.slack.SlackResponse;
 import io.chucknorris.api.model.Joke;
 import io.chucknorris.api.repository.JokeRepository;
@@ -16,7 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +37,9 @@ public class SlackControllerTest {
     @InjectMocks
     private SlackController slackController;
 
+    @Mock
+    private SlackService slackService;
+
     @Before
     public void setUp() {
         ReflectionTestUtils.setField(slackController, "baseUrl", "localhost");
@@ -45,9 +48,42 @@ public class SlackControllerTest {
         jokeId = "bg_h3xursougaxzprcrl0q";
         jokeValue = "Chuck Norris programs do not accept input.";
         joke = new Joke()
-                .setCategories(new String[]{"dev"})
-                .setId(jokeId)
-                .setValue(jokeValue);
+            .setCategories(new String[]{"dev"})
+            .setId(jokeId)
+            .setValue(jokeValue);
+    }
+
+    @Test
+    public void testConnect() {
+        AccessToken accessToken = new AccessToken();
+        accessToken.setAccessToken("23BE2D81-35B6-4B73-BCC9-8B6731D2540E");
+
+        when(slackService.requestAccessToken("my-super-secret-code")).thenReturn(accessToken);
+
+        ModelAndView view = slackController.connect("my-super-secret-code");
+        assertEquals(HttpStatus.OK, view.getStatus());
+        assertEquals("Congrats, the app was successfully installed for your Slack team!", view.getModel().get("page_title"));
+        assertEquals(false, view.getModel().get("error"));
+        assertEquals(null, view.getModel().get("message"));
+
+        verify(slackService, times(1)).requestAccessToken("my-super-secret-code");
+        verifyNoMoreInteractions(slackService);
+    }
+
+    @Test
+    public void testConnectSetsErrorIfAutehnticationTokenIsNull() {
+        AccessToken accessToken = new AccessToken();
+
+        when(slackService.requestAccessToken("my-super-secret-code")).thenReturn(accessToken);
+
+        ModelAndView view = slackController.connect("my-super-secret-code");
+        assertEquals(HttpStatus.UNAUTHORIZED, view.getStatus());
+        assertEquals("Oops, an error has occurred.", view.getModel().get("page_title"));
+        assertEquals(true, view.getModel().get("error"));
+        assertEquals("Oops, an error has occurred. Please try again later!", view.getModel().get("message"));
+
+        verify(slackService, times(1)).requestAccessToken("my-super-secret-code");
+        verifyNoMoreInteractions(slackService);
     }
 
     @Test
