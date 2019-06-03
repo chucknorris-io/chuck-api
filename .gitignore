@@ -21,3 +21,8 @@ pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
 release.properties
+
+# Property files
+src/main/resources/application-*.properties
+!src/main/resources/application.properties
+!src/main/resources/application-example.properties
