@@ -5,6 +5,7 @@ import io.chucknorris.api.lib.dailychuck.DailyChuck;
 import io.chucknorris.api.lib.dailychuck.DailyChuckIssue;
 import io.chucknorris.api.lib.dailychuck.DailyChuckRss;
 import io.chucknorris.api.lib.dailychuck.DailyChuckService;
+import io.chucknorris.api.lib.event.EventService;
 import io.chucknorris.api.repository.JokeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +37,9 @@ public class FeedControllerTest {
     private DateUtil dateUtil;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
+    @Mock
+    private EventService eventService;
 
     @InjectMocks
     private FeedController feedController;
@@ -73,6 +77,9 @@ public class FeedControllerTest {
 
         verify(dateUtil, times(1)).now();
         verifyNoMoreInteractions(dateUtil);
+
+        verify(eventService, times(0)).publishEvent(any());
+        verifyNoMoreInteractions(eventService);
     }
 
     @Test
@@ -97,6 +104,9 @@ public class FeedControllerTest {
 
         verify(dateUtil, times(1)).now();
         verifyNoMoreInteractions(dateUtil);
+
+        verify(eventService, times(1)).publishEvent(any());
+        verifyNoMoreInteractions(eventService);
     }
 
     @Test
@@ -119,6 +129,9 @@ public class FeedControllerTest {
 
         verify(dateUtil, times(1)).now();
         verifyNoMoreInteractions(dateUtil);
+
+        verify(eventService, times(0)).publishEvent(any());
+        verifyNoMoreInteractions(eventService);
     }
 
     @Test
@@ -146,5 +159,8 @@ public class FeedControllerTest {
 
         verify(dateUtil, times(1)).now();
         verifyNoMoreInteractions(dateUtil);
+
+        verify(eventService, times(1)).publishEvent(any());
+        verifyNoMoreInteractions(eventService);
     }
 }

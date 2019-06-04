@@ -3,7 +3,9 @@ package io.chucknorris.api.controller;
 import io.chucknorris.api.lib.DateUtil;
 import io.chucknorris.api.lib.dailychuck.DailyChuck;
 import io.chucknorris.api.lib.dailychuck.DailyChuckIssue;
+import io.chucknorris.api.lib.dailychuck.DailyChuckPublishedEvent;
 import io.chucknorris.api.lib.dailychuck.DailyChuckService;
+import io.chucknorris.api.lib.event.EventService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +21,12 @@ public class FeedController {
 
     DailyChuckService dailyChuckService;
     DateUtil dateUtil;
+    EventService eventService;
 
-    public FeedController(DailyChuckService dailyChuckService, DateUtil dateUtil) {
+    public FeedController(DailyChuckService dailyChuckService, DateUtil dateUtil, EventService eventService) {
         this.dailyChuckService = dailyChuckService;
         this.dateUtil = dateUtil;
+        this.eventService = eventService;
     }
 
     @RequestMapping(
@@ -43,6 +47,8 @@ public class FeedController {
         dailyChuck.addIssue(dailyChuckIssue);
 
         dailyChuckService.persist(dailyChuck);
+
+        eventService.publishEvent(new DailyChuckPublishedEvent(dailyChuckIssue));
 
         return dailyChuck;
     }
@@ -65,6 +71,8 @@ public class FeedController {
         dailyChuck.addIssue(dailyChuckIssue);
 
         dailyChuckService.persist(dailyChuck);
+
+        eventService.publishEvent(new DailyChuckPublishedEvent(dailyChuckIssue));
 
         return dailyChuckService.toRss(dailyChuck);
     }

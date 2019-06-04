@@ -5,6 +5,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.sns.AmazonSNSClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,5 +31,12 @@ public class AWSConfig {
             .withCredentials(new AWSStaticCredentialsProvider(credentials))
             .withRegion(region)
             .build();
+    }
+
+    @Bean
+    public AmazonSNSClient snsClient() {
+        AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, accessKeySecret);
+
+        return new AmazonSNSClient(credentials);
     }
 }
