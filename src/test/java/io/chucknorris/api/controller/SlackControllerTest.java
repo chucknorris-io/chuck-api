@@ -1,5 +1,7 @@
 package io.chucknorris.api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.chucknorris.api.lib.event.EventService;
 import io.chucknorris.api.lib.slack.Impl.*;
 import io.chucknorris.api.lib.slack.SlackResponse;
 import io.chucknorris.api.model.Joke;
@@ -32,6 +34,9 @@ public class SlackControllerTest {
     private static Joke joke;
 
     @Mock
+    private EventService eventService;
+
+    @Mock
     private JokeRepository jokeRepository;
 
     @InjectMocks
@@ -54,11 +59,12 @@ public class SlackControllerTest {
     }
 
     @Test
-    public void testConnect() {
+    public void testConnect() throws JsonProcessingException {
         AccessToken accessToken = new AccessToken();
         accessToken.setAccessToken("23BE2D81-35B6-4B73-BCC9-8B6731D2540E");
 
         when(slackService.requestAccessToken("my-super-secret-code")).thenReturn(accessToken);
+        when(eventService.publishEvent(any())).thenReturn(any());
 
         ModelAndView view = slackController.connect("my-super-secret-code");
         assertEquals(HttpStatus.OK, view.getStatus());
@@ -68,10 +74,13 @@ public class SlackControllerTest {
 
         verify(slackService, times(1)).requestAccessToken("my-super-secret-code");
         verifyNoMoreInteractions(slackService);
+
+        verify(eventService, times(1)).publishEvent(any());
+        verifyNoMoreInteractions(eventService);
     }
 
     @Test
-    public void testConnectSetsErrorIfAutehnticationTokenIsNull() {
+    public void testConnectSetsErrorIfAuthenticationTokenIsNull() throws JsonProcessingException {
         AccessToken accessToken = new AccessToken();
 
         when(slackService.requestAccessToken("my-super-secret-code")).thenReturn(accessToken);
@@ -84,6 +93,9 @@ public class SlackControllerTest {
 
         verify(slackService, times(1)).requestAccessToken("my-super-secret-code");
         verifyNoMoreInteractions(slackService);
+
+        verify(eventService, times(0)).publishEvent(any());
+        verifyNoMoreInteractions(eventService);
     }
 
     @Test

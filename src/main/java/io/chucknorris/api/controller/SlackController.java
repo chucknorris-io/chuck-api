@@ -1,5 +1,7 @@
 package io.chucknorris.api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.chucknorris.api.lib.event.EventService;
 import io.chucknorris.api.lib.slack.Impl.*;
 import io.chucknorris.api.lib.slack.SlackResponse;
 import io.chucknorris.api.model.Joke;
@@ -33,10 +35,12 @@ public class SlackController {
     @Value("${application.base_url}")
     private String baseUrl;
 
+    private EventService eventService;
     private JokeRepository jokeRepository;
     private SlackService slackService;
 
-    public SlackController(JokeRepository jokeRepository, SlackService slackService) {
+    public SlackController(EventService eventService, JokeRepository jokeRepository, SlackService slackService) {
+        this.eventService = eventService;
         this.jokeRepository = jokeRepository;
         this.slackService = slackService;
     }
@@ -47,7 +51,7 @@ public class SlackController {
             headers = HttpHeaders.ACCEPT + "=" + MediaType.TEXT_HTML_VALUE,
             produces = MediaType.TEXT_HTML_VALUE
     )
-    public ModelAndView connect(@RequestParam(value = "code") final String code) {
+    public ModelAndView connect(@RequestParam(value = "code") final String code) throws JsonProcessingException {
         AccessToken accessToken = slackService.requestAccessToken(code);
 
         ModelAndView model = new ModelAndView("connect/slack");
@@ -56,6 +60,9 @@ public class SlackController {
             model.addObject("page_title", "Congrats, the app was successfully installed for your Slack team!");
             model.addObject("error", false);
             model.addObject("message", null);
+
+            SlackConnectEvent slackConnectEvent = new SlackConnectEvent(accessToken);
+            eventService.publishEvent(slackConnectEvent);
         } else {
             model.setStatus(HttpStatus.UNAUTHORIZED);
             model.addObject("page_title", "Oops, an error has occurred.");

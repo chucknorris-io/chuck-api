@@ -1,23 +1,9 @@
 package io.chucknorris.api.lib.dailychuck;
 
-import io.chucknorris.api.lib.event.Event;
+import io.chucknorris.api.lib.event.BaseEvent;
 
-public class DailyChuckPublishedEvent implements Event {
-
-    final String name = "DailyChuckPublishedEvent";
-    final Object payload;
-
+public class DailyChuckPublishedEvent extends BaseEvent {
     public DailyChuckPublishedEvent(DailyChuckIssue dailyChuckIssue) {
-        this.payload = dailyChuckIssue;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Object getPayload() {
-        return payload;
+        super("DailyChuckPublishedEvent", dailyChuckIssue);
     }
 }
