@@ -3,6 +3,3 @@ language: java
 jdk:
   - openjdk8
 
-branches:
-  only:
-  - feature/spring-migration
