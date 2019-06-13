@@ -3,3 +3,29 @@ language: java
 jdk:
   - openjdk8
 
+cache:
+  directories:
+    - $HOME/.m2
+
+services:
+  - docker
+
+before_install:
+  - docker pull chucknorrisio/postgres
+  - docker run -d -p '5433:5432' --name "chucknorris-postgres" chucknorrisio/postgres
+  - npm install --global newman
+
+jobs:
+  include:
+    - stage: "Tests"
+      name: "Unit Tests"
+      script: mvn test
+    - script:
+        - mvn spring-boot:run -Dspring.profiles.active=travis &
+        - sleep 20
+        - newman run postman/io.chucknorris.api.postman_collection.json --environment postman/local.postman_environment.json
+      name: "End-to-End Tests"
+
+branches:
+  only:
+    - feature/end-to-end-testing

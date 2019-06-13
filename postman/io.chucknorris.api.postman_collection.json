@@ -1857,7 +1857,7 @@
 							"response": []
 						},
 						{
-							"name": "/jokes/random  personalized (json)",
+							"name": "/jokes/random  personalised (json)",
 							"event": [
 								{
 									"listen": "test",
@@ -1943,7 +1943,7 @@
 							"response": []
 						},
 						{
-							"name": "/jokes/random  personalized (text)",
+							"name": "/jokes/random  personalised (text)",
 							"event": [
 								{
 									"listen": "test",
@@ -2019,6 +2019,189 @@
 										{
 											"key": "name",
 											"value": "Bob"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/jokes/random  personalised with category (json)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "670a9e46-d8a4-4c21-8a33-d409a7efb4cb",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Headers are correct\", function () {",
+											"  pm.response.to.be.header(",
+											"    \"Access-Control-Allow-Origin\",",
+											"    \"*\"",
+											"  );",
+											"  pm.response.to.be.header(",
+											"    \"Access-Control-Allow-Credentials\",",
+											"    \"true\"",
+											"  );",
+											"  pm.response.to.be.header(",
+											"    \"Content-Type\",",
+											"    \"application/json;charset=UTF-8\"",
+											"  );",
+											"});",
+											"",
+											"pm.test('Schema is valid', function() {",
+											"  pm.expect(tv4.validate(",
+											"    pm.response.json(),",
+											"    pm.environment.get(\"schema\").definitions['Joke']",
+											"  )).to.be.true;",
+											"});",
+											"",
+											"pm.test('Joke value contains \"Bob\"', function() {",
+											"  pm.expect(pm.response.json().value).to.include(\"Bob\");",
+											"});",
+											"",
+											"pm.test(\"Has categories = ['dev']\", function () {",
+											"  var jsonData = pm.response.json();",
+											"  pm.expect(jsonData.categories).satisfy(category => {",
+											"      return (category[0] === 'dev')",
+											"  });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "41ffca73-01aa-4567-bbff-fd7d641a0da6",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Origin",
+										"value": "*",
+										"description": "The Origin request header indicates where a fetch originates from. It doesn't include any path information, but only the server name. It is sent with CORS requests, as well as with POST requests. It is similar to the Referer header, but, unlike this header, it doesn't disclose the whole path.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/jokes/random?name=Bob&category=dev",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"jokes",
+										"random"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Bob"
+										},
+										{
+											"key": "category",
+											"value": "dev"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/jokes/random  personalised with category (text)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "670a9e46-d8a4-4c21-8a33-d409a7efb4cb",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Headers are correct\", function () {",
+											"  pm.response.to.be.header(",
+											"    \"Access-Control-Allow-Origin\",",
+											"    \"*\"",
+											"  );",
+											"  pm.response.to.be.header(",
+											"    \"Access-Control-Allow-Credentials\",",
+											"    \"true\"",
+											"  );",
+											"  pm.response.to.be.header(",
+											"    \"Content-Type\",",
+											"    \"text/plain;charset=UTF-8\"",
+											"  );",
+											"});",
+											"",
+											"pm.test(\"Has a non-empty body\", function () {",
+											"  pm.expect(pm.response.text().length).to.be.above(0);",
+											"});",
+											"",
+											"pm.test('Body contains \"Bob\"', function() {",
+											"  pm.expect(pm.response.text()).to.include(\"Bob\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "41ffca73-01aa-4567-bbff-fd7d641a0da6",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									},
+									{
+										"description": "The Origin request header indicates where a fetch originates from. It doesn't include any path information, but only the server name. It is sent with CORS requests, as well as with POST requests. It is similar to the Referer header, but, unlike this header, it doesn't disclose the whole path.",
+										"key": "Origin",
+										"type": "text",
+										"value": "*"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/jokes/random?name=Bob&category=dev",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"jokes",
+										"random"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Bob"
+										},
+										{
+											"key": "category",
+											"value": "dev"
 										}
 									]
 								}
