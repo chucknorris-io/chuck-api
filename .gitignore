@@ -26,3 +26,6 @@ release.properties
 src/main/resources/application-*.properties
 !src/main/resources/application.properties
 !src/main/resources/application-example.properties
+
+# Monitoring
+monitoring/prometheus/data/*

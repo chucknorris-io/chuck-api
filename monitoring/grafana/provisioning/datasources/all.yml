@@ -1,0 +1,7 @@
+# https://grafana.com/docs/administration/provisioning/#datasources
+datasources:
+  - name: Prometheus
+    type: prometheus
+    isDefault: true
+    access: proxy
+    url: http://prometheus:9090

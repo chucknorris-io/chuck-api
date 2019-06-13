@@ -1,16 +1,36 @@
 version: '3.3'
 
 services:
+  grafana:
+    build: './monitoring/grafana'
+    container_name: chucknorris-grafana
+    restart: always
+    ports:
+      - '3000:3000'
+
   postgres:
     image: chucknorrisio/postgres
     container_name: chucknorris-postgres
     ports:
-      - "5432:5432"
+      - '5432:5432'
+
+  prometheus:
+    image: prom/prometheus
+    container_name: chucknorris-prometheus
+    volumes:
+      - './monitoring/prometheus/config:/prometheus'
+      - './monitoring/prometheus/data:/data'
+    command:
+      - '--config.file=/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/data'
+    ports:
+      - '9090:9090'
+    restart: always
 
   swagger:
     image: swaggerapi/swagger-ui
     container_name: chucknorris-swagger
     ports:
-      - "4567:8080"
+      - '4567:8080'
     environment:
-      API_URL: "http://localhost:8080/documentation"
+      API_URL: 'http://localhost:8080/documentation'
