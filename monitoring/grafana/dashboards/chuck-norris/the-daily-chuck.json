@@ -1,0 +1,191 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 6,
+  "links": [],
+  "panels": [
+    {
+      "aliasColors": {},
+      "bars": false,
+      "cacheTimeout": null,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "application_daily_chuck_avg_sub_rate",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "avg_sub_rate",
+          "refId": "A"
+        },
+        {
+          "expr": "application_daily_chuck_avg_unsub_rate",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "avg_unsub_rate",
+          "refId": "B"
+        },
+        {
+          "expr": "application_daily_chuck_campaign_count",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "campaign_count",
+          "refId": "C"
+        },
+        {
+          "expr": "application_daily_chuck_cleaned_count",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "cleaned_count",
+          "refId": "D"
+        },
+        {
+          "expr": "application_daily_chuck_click_rate",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "click_rate",
+          "refId": "E"
+        },
+        {
+          "expr": "application_daily_chuck_member_count",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "member_count",
+          "refId": "F"
+        },
+        {
+          "expr": "application_daily_chuck_unsubscribe_count",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "unsubscribe_count",
+          "refId": "G"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Daily Chuck Stats over time",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    }
+  ],
+  "schemaVersion": 18,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now/M",
+    "to": "now/M"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "",
+  "title": "The Daily Chuck",
+  "uid": "XVZSSS4Zz",
+  "version": 1
+}

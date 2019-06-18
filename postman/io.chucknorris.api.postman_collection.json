@@ -172,6 +172,74 @@
 			"name": "Feed",
 			"item": [
 				{
+					"name": "/feed/daily-chuck/stats",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7bfd91a6-f4fd-4d1a-9a18-c03f173685c1",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Headers are correct\", function () {",
+									"  pm.response.to.be.header(",
+									"    \"Access-Control-Allow-Origin\",",
+									"    \"*\"",
+									"  );",
+									"  pm.response.to.be.header(",
+									"    \"Access-Control-Allow-Credentials\",",
+									"    \"true\"",
+									"  );",
+									"  pm.response.to.be.header(",
+									"    \"Content-Type\",",
+									"    \"application/json;charset=UTF-8\"",
+									"  );",
+									"});",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  pm.expect(tv4.validate(",
+									"    pm.response.json(),",
+									"    pm.environment.get(\"schema\").definitions['MailingListStatistic']",
+									"  )).to.be.true;",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"description": "The Origin request header indicates where a fetch originates from. It doesn't include any path information, but only the server name. It is sent with CORS requests, as well as with POST requests. It is similar to the Referer header, but, unlike this header, it doesn't disclose the whole path.",
+								"key": "Origin",
+								"type": "text",
+								"value": "*"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/feed/daily-chuck/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feed",
+								"daily-chuck",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "The Daily Chuck (json)",
 					"event": [
 						{

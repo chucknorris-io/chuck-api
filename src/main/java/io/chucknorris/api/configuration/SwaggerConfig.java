@@ -1,5 +1,9 @@
 package io.chucknorris.api.configuration;
 
+import static com.google.common.base.Predicates.or;
+import static springfox.documentation.builders.PathSelectors.regex;
+
+import com.google.common.base.Predicate;
 import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,9 +26,7 @@ public class SwaggerConfig {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
         .apis(RequestHandlerSelectors.basePackage("io.chucknorris"))
-        .paths(
-            PathSelectors.ant("/jokes/*")
-        )
+        .paths(paths())
         .build()
         .apiInfo(getApiInfo());
   }
@@ -51,6 +53,13 @@ public class SwaggerConfig {
         "GNU General Public License v3.0",
         "https://github.com/chucknorris-io/chuck-api/blob/master/LICENSE",
         Collections.emptyList()
+    );
+  }
+
+  private Predicate<String> paths() {
+    return or(
+        regex("/jokes.*"),
+        regex("/feed.*")
     );
   }
 }

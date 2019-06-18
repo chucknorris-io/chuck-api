@@ -23,7 +23,7 @@ public class Joke implements Serializable {
 
   @ApiModelProperty(
       name = "categories",
-      notes = "List of categories."
+      notes = "MailingList of categories."
   )
   @Column(name = "categories", columnDefinition = "jsonb")
   @Type(type = "jsonb")
