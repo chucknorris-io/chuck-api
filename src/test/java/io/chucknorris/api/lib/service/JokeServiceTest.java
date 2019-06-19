@@ -42,12 +42,12 @@ public class JokeServiceTest {
 
   @Test
   public void testRandomJokeByCategoriesReturnsJoke() {
-    when(jokeRepository.getRandomJokeByCategories("dev, movie")).thenReturn(joke);
+    when(jokeRepository.getRandomJokeByCategories("dev,movie")).thenReturn(joke);
 
     Joke joke = jokeService.randomJokeByCategories(new String[]{"dev", "movie"});
     assertEquals(JokeServiceTest.joke, joke);
 
-    verify(jokeRepository, times(1)).getRandomJokeByCategories("dev, movie");
+    verify(jokeRepository, times(1)).getRandomJokeByCategories("dev,movie");
     verifyNoMoreInteractions(jokeRepository);
   }
 
@@ -60,7 +60,7 @@ public class JokeServiceTest {
     when(
         jokeRepository.getRandomPersonalizedJokeByCategories(
             substitute,
-            "dev, movie"
+            "dev,movie"
         )
     ).thenReturn(joke);
 
@@ -69,7 +69,7 @@ public class JokeServiceTest {
 
     verify(jokeRepository, times(1)).getRandomPersonalizedJokeByCategories(
         substitute,
-        "dev, movie"
+        "dev,movie"
     );
     verifyNoMoreInteractions(jokeRepository);
   }
@@ -81,14 +81,14 @@ public class JokeServiceTest {
     Pageable pageable = PageRequest.of(1, 5);
 
     when(
-        jokeRepository.findByValueContainsAndFilter(query, "dev, movie", pageable)
+        jokeRepository.findByValueContainsAndFilter(query, "dev,movie", pageable)
     ).thenReturn(Page.empty());
 
     jokeService.searchWithCategoryFilter(query, categories, pageable);
 
     verify(jokeRepository, times(1)).findByValueContainsAndFilter(
         query,
-        "dev, movie",
+        "dev,movie",
         pageable
     );
     verifyNoMoreInteractions(jokeRepository);

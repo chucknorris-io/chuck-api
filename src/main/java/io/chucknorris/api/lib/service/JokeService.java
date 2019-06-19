@@ -27,7 +27,7 @@ public class JokeService {
    */
   public Joke randomJokeByCategories(final String[] categories) {
     return jokeRepository.getRandomJokeByCategories(
-        String.join(", ", categories)
+        String.join(",", categories)
     );
   }
 
@@ -40,7 +40,7 @@ public class JokeService {
   ) {
     return jokeRepository.getRandomPersonalizedJokeByCategories(
         substitute,
-        String.join(", ", categories)
+        String.join(",", categories)
     );
   }
 
@@ -54,7 +54,7 @@ public class JokeService {
   ) {
     return jokeRepository.findByValueContainsAndFilter(
         query,
-        String.join(", ", categories),
+        String.join(",", categories),
         pageable
     );
   }
