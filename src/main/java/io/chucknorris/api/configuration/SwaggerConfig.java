@@ -21,7 +21,7 @@ public class SwaggerConfig {
   public @Bean Docket api() {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
-        .apis(RequestHandlerSelectors.basePackage("io.chucknorris.api.controller"))
+        .apis(RequestHandlerSelectors.basePackage("io.chucknorris"))
         .paths(
             PathSelectors.ant("/jokes/*")
         )
