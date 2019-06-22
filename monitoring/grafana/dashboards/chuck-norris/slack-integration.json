@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1560608636198,
+  "iteration": 1561234263529,
   "links": [
     {
       "icon": "external link",
@@ -287,7 +287,7 @@
         "name": "team_name",
         "options": [],
         "query": "label_values(application_slack_command_total, team_name)",
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -300,8 +300,8 @@
     ]
   },
   "time": {
-    "from": "now/d",
-    "to": "now/d"
+    "from": "now/w",
+    "to": "now/w"
   },
   "timepicker": {
     "refresh_intervals": [
