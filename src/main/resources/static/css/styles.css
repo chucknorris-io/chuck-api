@@ -1,3 +1,9 @@
+@font-face{
+    font-family: '04b_30';
+    src: url('/font/04b_30.woff') format('woff'),
+         url('/font/04b_30.ttf') format('truetype')
+}
+
 body {
     font: 16px/1.5 "Courier New", Arial, sans-serif
 }
@@ -54,10 +60,13 @@ p {
 }
 
 h3 {
-    font-size: 28px;
+    color: #f15b23;
+    font-family: '04b_30';
+    font-size: 24px;
     font-weight: 300;
     margin: 0 0 10px;
-    padding: 0
+    padding: 0;
+    text-shadow: 1px 1px #222;
 }
 
 code {
