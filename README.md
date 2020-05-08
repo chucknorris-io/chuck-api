@@ -32,7 +32,7 @@ $ curl --request GET \
 # Retrieve a random personalized chuck joke by one or more categories
 $ curl --request GET \
        --url 'https://api.chucknorris.io/jokes/random?name=Bob&category=dev,explicit' \
-       --header 'accept: application/jso'
+       --header 'accept: application/json'
 
 # Retrieve a list of available categories
 $ curl --request GET \
