@@ -8,7 +8,7 @@ import lombok.Data;
 public class CommandResponse implements SlackCommandResponse, Serializable {
 
   @JsonProperty("icon_url")
-  private String iconUrl = "https://assets.chucknorris.host/img/avatar/chuck-norris.png";
+  private String iconUrl = "https://api.chucknorris.io/img/avatar/chuck-norris.png";
 
   @JsonProperty("text")
   private String text;
