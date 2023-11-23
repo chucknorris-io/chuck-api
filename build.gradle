@@ -28,7 +28,7 @@ repositories {
 }
 
 // versions
-def lombokVersion = "1.18.8"
+def lombokVersion = "1.18.30"
 
 dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
