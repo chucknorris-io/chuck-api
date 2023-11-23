@@ -21,7 +21,7 @@ String appVer = gitRev()
 
 group = "io.chucknorris"
 version = appVer
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
