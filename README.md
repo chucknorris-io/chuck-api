@@ -51,7 +51,7 @@ Example response:
 {
   "categories": ["dev"],
   "created_at": "2019-06-02 08:47:39.43184",
-  "icon_url": "https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+  "icon_url": "https://api.chucknorris.io/img/avatar/chuck-norris.png",
   "id": "bwoz2uwsqnwmyawyxdvo1w",
   "updated_at": "2019-06-02 08:47:39.43184",
   "url": "https://api.chucknorris.io/jokes/bwoz2uwsqnwmyawyxdvo1w",

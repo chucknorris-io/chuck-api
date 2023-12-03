@@ -74,7 +74,7 @@ public class SlackControllerTest {
     public void setUp() {
         ReflectionTestUtils.setField(slackController, "baseUrl", "localhost");
 
-        iconUrl = "https://assets.chucknorris.host/img/avatar/chuck-norris.png";
+        iconUrl = "https://api.chucknorris.io/img/avatar/chuck-norris.png";
         jokeId = "bg_h3xursougaxzprcrl0q";
         jokeValue = "Chuck Norris programs do not accept input.";
         joke = Joke.builder()

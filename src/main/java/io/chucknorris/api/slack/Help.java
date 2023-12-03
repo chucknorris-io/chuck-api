@@ -10,7 +10,7 @@ public class Help implements SlackCommandResponse {
   private CommandResponseAttachment[] attachments;
 
   @JsonProperty("icon_url")
-  private String iconUrl = "https://assets.chucknorris.host/img/avatar/chuck-norris.png";
+  private String iconUrl = "https://api.chucknorris.io/img/avatar/chuck-norris.png";
 
   @JsonProperty("response_type")
   private String responseType = ResponseType.EPHEMERAL;

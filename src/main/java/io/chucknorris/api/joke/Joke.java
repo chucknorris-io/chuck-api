@@ -52,7 +52,7 @@ public class Joke implements Serializable {
       notes = "Absolute URL of the Chuck Norris icon."
   )
   @Transient
-  final private String iconUrl = "https://assets.chucknorris.host/img/avatar/chuck-norris.png";
+  final private String iconUrl = "https://api.chucknorris.io/img/avatar/chuck-norris.png";
 
   @ApiModelProperty(
       example = "nzf46249t8cf7wgz3rf_rg",
