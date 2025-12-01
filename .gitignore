@@ -24,9 +24,9 @@ gradle-app.setting
 **/build/
 
 # Property files
-src/main/resources/application-*.properties
-!src/main/resources/application.properties
-!src/main/resources/application-example.properties
+chucknorris-web/src/main/resources/application-*.properties
+!chucknorris-web/src/main/resources/application.properties
+!chucknorris-web/src/main/resources/application-example.properties
 
 # Monitoring
 monitoring/prometheus/data/*
